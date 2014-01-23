@@ -26,6 +26,7 @@ import logging
 import math
 import subprocess
 import time
+import re
 
 logger = logging.getLogger('')
 
@@ -95,3 +96,12 @@ class Tools():
 
     def runtime(self):
         return datetime.datetime.now() - self._start
+        
+    def myips(self): 
+        self.found_ips = []
+        ips = re.findall( r'[0-9]+(?:\.[0-9]+){3}', subprocess.getoutput("/sbin/ifconfig"))
+        for ip in ips:
+            if ip.startswith("255") or ip.startswith("127") or ip.endswith("255"):
+                continue
+            self.found_ips.append(ip)   
+        return  self.found_ips     
